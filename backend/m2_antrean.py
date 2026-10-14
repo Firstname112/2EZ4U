@@ -409,9 +409,10 @@ class AntreanMelingkar:
 class Aksi:
     """Satu catatan riwayat. `data` = yang dibutuhkan untuk MEMBALIKKAN (mis. daftar pesanan)."""
 
-    def __init__(self, jenis, data, fn_undo, fn_redo):
+    def __init__(self, jenis, data, fn_undo, fn_redo, target=""):
         self.jenis = jenis          # "ORDER" / "ENQUEUE" / "DEQUEUE"
         self.data = data
+        self.target = target        # "naif" / "circular" (dipakai UI untuk pesan undo/redo)
         self.fn_undo = fn_undo
         self.fn_redo = fn_redo
 
@@ -492,7 +493,7 @@ class ManajerAntrean:
             def redo():
                 antrean.dequeue_many(len(items))
 
-            self.riwayat.catat(Aksi("DEQUEUE", items, undo, redo))
+            self.riwayat.catat(Aksi("DEQUEUE", items, undo, redo, nama))
         return items, geser
 
     def dequeue_naif(self, k=1):
